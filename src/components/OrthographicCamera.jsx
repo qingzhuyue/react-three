@@ -2,57 +2,49 @@
  * @Author: qingzhuyue qingzhuyue@foxmail.com
  * @Date: 2024-05-04 22:48:24
  * @LastEditors: qingzhuyue qingzhuyue@foxmail.com
- * @LastEditTime: 2024-05-04 23:50:07
+ * @LastEditTime: 2024-05-07 23:57:06
  * @FilePath: /react-three/src/components/OrthographicCamera.jsx
  * @Description: 
  * Copyright (c) 2024 by ${qingzhuyue} email: ${qingzhuyue@foxmail.com}, All Rights Reserved.
  */
-import React,{useRef,useEffect} from "react";
+import React, { useRef, useEffect } from "react";
 import * as THREE from 'three';
 
-function OrthographicCamera(){
-  const mount =  useRef(null);
+function OrthographicCamera() {
+  const mount = useRef(null);
 
-  useEffect(()=>{
+  useEffect(() => {
     const scene = new THREE.Scene(); // 场景
-   
-    const camera = new THREE.OrthographicCamera(-1,1,1.5,-1.5,1,10)
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);  // 照相机
     const renderer = new THREE.WebGLRenderer();// 渲染器
-camera.lookAt(new THREE.Vector3(0,0,0))
-    renderer.setSize(window.innerWidth,window.innerHeight);
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
     mount.current.appendChild(renderer.domElement);
 
-    const geometry = new THREE.BufferGeometry(); // 物体
-    const material = new THREE.MeshBasicMaterial({color:0x00ff00});
-    const vertices = new Float32Array( [
-      -1.0, -1.0,  1.0, // v0
-       1.0, -1.0,  1.0, // v1
-       1.0,  1.0,  1.0, // v2
-    
-       1.0,  1.0,  1.0, // v3
-      -1.0,  1.0,  1.0, // v4
-      -1.0, -1.0,  1.0  // v5
-    ] );
-    geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+    const geometry = new THREE.BoxGeometry(3,3,3); // 物体
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xffff00,
+      opacity: 0.2
+    });;
+    const cube = new THREE.Mesh(geometry, material);
 
-    const mesh = new THREE.Mesh(geometry,material);
+    scene.add(cube);
+    camera.position.z = 10;
 
-    scene.add(mesh);
-    camera.position.set(0.1,0.1,1.5);
-    scene.add(camera);
-    renderer.render(scene,camera)
-    // const animate = () => {
-    //   requestAnimationFrame(animate);
+    const animate = () => {
+      requestAnimationFrame(animate);
+      cube.rotation.x += 0.02;
+      cube.rotation.y += 0.02;
 
-    //   renderer.render(scene,camera)
-    // };
-    // animate();
+      renderer.render(scene, camera)
+    };
+    animate();
 
-    return ()=>{
+    return () => {
       mount.current.removeChild(renderer.domElement)
     }
-  },[])
+  }, [])
 
   return <div ref={mount} />
 }
