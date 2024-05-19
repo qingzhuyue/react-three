@@ -1,4 +1,4 @@
-import { useEffect,useRef } from "react";
+import { useEffect, useRef } from "react";
 import _ from 'lodash'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -9,7 +9,7 @@ import starflake2 from "../assets/starflake2.png"
 import cloudbg from "../assets/cloud.png"
 
 export default function OuterSpace() {
-  const mount =  useRef(null);
+  const mount = useRef(null);
   let materials = [];
   let parameters;
   useEffect(() => {
@@ -21,7 +21,6 @@ export default function OuterSpace() {
     scene.fog = new THREE.Fog(0x000000, 0, 10000);
     const depth = 1400; // 盒子的深度
 
-    const container = document.getElementById("login");
     const width = window.innerWidth;
     const height = window.innerHeight;
     const fov = 15;
@@ -242,5 +241,5 @@ export default function OuterSpace() {
     }
     animate();
   }
-  return <div ref={mount}/>
+  return <div ref={mount} />
 }
